@@ -3,13 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
+import Header from '@/components/Header';
+import HeroSection from '@/components/HeroSection';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   const [selectedDoctor, setSelectedDoctor] = useState('');
@@ -128,234 +126,29 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 bg-white border-b shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Icon name="Heart" className="text-primary" size={32} />
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">МедЦентр</h1>
-              <p className="text-sm text-muted-foreground">Наркологическая помощь 24/7</p>
-            </div>
-          </div>
-          <div className="hidden md:flex items-center gap-6">
-            <a href="#services" className="text-foreground hover:text-primary transition">Услуги</a>
-            <a href="#doctors" className="text-foreground hover:text-primary transition">Специалисты</a>
-            <a href="#methods" className="text-foreground hover:text-primary transition">Методы</a>
-            <a href="#testimonials" className="text-foreground hover:text-primary transition">Отзывы</a>
-            <a href="#contacts" className="text-foreground hover:text-primary transition">Контакты</a>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden lg:block text-right">
-              <p className="text-2xl font-bold text-primary">+7 (495) 123-45-67</p>
-              <p className="text-xs text-muted-foreground">Круглосуточно</p>
-            </div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button size="lg" className="gap-2">
-                  <Icon name="Calendar" size={20} />
-                  Записаться
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Онлайн запись на консультацию</DialogTitle>
-                  <DialogDescription>
-                    Выберите специалиста и удобное время для посещения
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="doctor">Выберите специалиста *</Label>
-                    <Select value={selectedDoctor} onValueChange={setSelectedDoctor}>
-                      <SelectTrigger id="doctor">
-                        <SelectValue placeholder="Выберите врача" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {doctors.map((doctor, idx) => (
-                          <SelectItem key={idx} value={doctor.name}>
-                            {doctor.name} - {doctor.specialty}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="time">Время приёма *</Label>
-                    <Select value={selectedTime} onValueChange={setSelectedTime}>
-                      <SelectTrigger id="time">
-                        <SelectValue placeholder="Выберите время" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {timeSlots.map((time) => (
-                          <SelectItem key={time} value={time}>
-                            {time}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Ваше имя *</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Иван Иванов"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Телефон *</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="+7 (___) ___-__-__"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Комментарий</Label>
-                    <Textarea
-                      id="message"
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Опишите вашу ситуацию (необязательно)"
-                      rows={3}
-                    />
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    * Обязательные поля. Мы гарантируем полную конфиденциальность ваших данных.
-                  </p>
-                  <Button type="submit" className="w-full" size="lg">
-                    Отправить заявку
-                  </Button>
-                </form>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </div>
-      </header>
+      <Header
+        doctors={doctors}
+        timeSlots={timeSlots}
+        selectedDoctor={selectedDoctor}
+        setSelectedDoctor={setSelectedDoctor}
+        selectedTime={selectedTime}
+        setSelectedTime={setSelectedTime}
+        formData={formData}
+        setFormData={setFormData}
+        handleSubmit={handleSubmit}
+      />
 
-      <section className="bg-gradient-to-br from-primary/10 via-background to-primary/5 py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge variant="secondary" className="mb-4">Работаем с 2008 года</Badge>
-            <h2 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-              Профессиональная наркологическая помощь
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Современные методы лечения зависимостей. Анонимно, безопасно, эффективно. 
-              Выезд на дом 24/7 по Москве и области.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="gap-2 text-lg px-8">
-                <Icon name="Phone" size={20} />
-                +7 (495) 123-45-67
-              </Button>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="lg" variant="outline" className="gap-2 text-lg px-8">
-                    <Icon name="Calendar" size={20} />
-                    Онлайн запись
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                  <DialogHeader>
-                    <DialogTitle>Онлайн запись на консультацию</DialogTitle>
-                    <DialogDescription>
-                      Выберите специалиста и удобное время для посещения
-                    </DialogDescription>
-                  </DialogHeader>
-                  <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="doctor-hero">Выберите специалиста *</Label>
-                      <Select value={selectedDoctor} onValueChange={setSelectedDoctor}>
-                        <SelectTrigger id="doctor-hero">
-                          <SelectValue placeholder="Выберите врача" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {doctors.map((doctor, idx) => (
-                            <SelectItem key={idx} value={doctor.name}>
-                              {doctor.name} - {doctor.specialty}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="time-hero">Время приёма *</Label>
-                      <Select value={selectedTime} onValueChange={setSelectedTime}>
-                        <SelectTrigger id="time-hero">
-                          <SelectValue placeholder="Выберите время" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timeSlots.map((time) => (
-                            <SelectItem key={time} value={time}>
-                              {time}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="name-hero">Ваше имя *</Label>
-                      <Input
-                        id="name-hero"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="Иван Иванов"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone-hero">Телефон *</Label>
-                      <Input
-                        id="phone-hero"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+7 (___) ___-__-__"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="message-hero">Комментарий</Label>
-                      <Textarea
-                        id="message-hero"
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        placeholder="Опишите вашу ситуацию (необязательно)"
-                        rows={3}
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      * Обязательные поля. Мы гарантируем полную конфиденциальность ваших данных.
-                    </p>
-                    <Button type="submit" className="w-full" size="lg">
-                      Отправить заявку
-                    </Button>
-                  </form>
-                </DialogContent>
-              </Dialog>
-            </div>
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-              <div className="flex flex-col items-center gap-2">
-                <Icon name="Clock" size={48} className="text-primary" />
-                <p className="font-semibold text-foreground">24/7</p>
-                <p className="text-sm text-muted-foreground">Круглосуточно</p>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <Icon name="ShieldCheck" size={48} className="text-primary" />
-                <p className="font-semibold text-foreground">Анонимно</p>
-                <p className="text-sm text-muted-foreground">Конфиденциальность</p>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <Icon name="Award" size={48} className="text-primary" />
-                <p className="font-semibold text-foreground">15+ лет</p>
-                <p className="text-sm text-muted-foreground">Опыт работы</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        doctors={doctors}
+        timeSlots={timeSlots}
+        selectedDoctor={selectedDoctor}
+        setSelectedDoctor={setSelectedDoctor}
+        selectedTime={selectedTime}
+        setSelectedTime={setSelectedTime}
+        formData={formData}
+        setFormData={setFormData}
+        handleSubmit={handleSubmit}
+      />
 
       <section id="services" className="py-20 bg-background">
         <div className="container mx-auto px-4">
@@ -543,52 +336,7 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="bg-foreground text-background py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Icon name="Heart" className="text-primary" size={24} />
-                <h3 className="text-xl font-bold">МедЦентр</h3>
-              </div>
-              <p className="text-sm text-background/70">
-                Профессиональная наркологическая помощь с 2008 года. 
-                Лицензия № ЛО-77-01-012345
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Информация</h4>
-              <ul className="space-y-2 text-sm text-background/70">
-                <li><a href="#services" className="hover:text-primary transition">Услуги</a></li>
-                <li><a href="#doctors" className="hover:text-primary transition">Специалисты</a></li>
-                <li><a href="#methods" className="hover:text-primary transition">Методы лечения</a></li>
-                <li><a href="#testimonials" className="hover:text-primary transition">Отзывы</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Контакты</h4>
-              <ul className="space-y-2 text-sm text-background/70">
-                <li className="flex items-center gap-2">
-                  <Icon name="Phone" size={16} />
-                  +7 (495) 123-45-67
-                </li>
-                <li className="flex items-center gap-2">
-                  <Icon name="Mail" size={16} />
-                  info@medcentr.ru
-                </li>
-                <li className="flex items-center gap-2">
-                  <Icon name="MapPin" size={16} />
-                  г. Москва, ул. Примерная, 1
-                </li>
-              </ul>
-            </div>
-          </div>
-          <Separator className="bg-background/20 mb-6" />
-          <div className="text-center text-sm text-background/60">
-            <p>© 2024 МедЦентр. Все права защищены. Имеются противопоказания, необходима консультация специалиста.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
